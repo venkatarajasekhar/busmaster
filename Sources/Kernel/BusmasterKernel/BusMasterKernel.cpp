@@ -11,10 +11,16 @@ BusMasterKernel* BusMasterKernel::mKernel = nullptr;
 
 BusMasterKernel* BusMasterKernel::create()
 {
-    if ( nullptr == mKernel )
+    if (!mKernel)
     {
-        mKernel = new BusMasterKernel();
+      return mKernel; 
     }
+     try{
+     mKernel = new BusMasterKernel();
+     }catch(...){
+     cout << "Error: Allocation of the memory." <<endl;
+     exit();
+     }
     return mKernel;
 }
 
@@ -22,7 +28,12 @@ BusMasterKernel* BusMasterKernel::create()
 BusMasterKernel::BusMasterKernel()
 {
     mDIL_GetInterface = nullptr;
+    try{
     mBmNetworkService = new BMNetwork();
+    }catch(...){
+     cout << "Error: Allocation of the memory." <<endl;
+     exit();
+     }
     loadDilInterface();
 }
 
@@ -54,14 +65,14 @@ bool BusMasterKernel::loadDilInterface()
     {
         mDIL_GetInterface = nullptr;
         mDriverLibrary = LoadLibrary( defBusmaster_Dil_Dll_Name );
-        if ( nullptr == mDriverLibrary )
+        if (!mDriverLibrary )
         {
-            result = false;
+            result = true;
         }
         mDIL_GetInterface = (pDIL_GetInterface)GetProcAddress( mDriverLibrary, defBusmaster_Dil_GetDil_Func );
-        if ( nullptr == mDIL_GetInterface )
+        if (!mDIL_GetInterface )
         {
-            result = false;
+            result = true;
         }
     }
     return result;
@@ -79,9 +90,9 @@ KERNEL_USAGEMODE HRESULT DIL_GetInterface( ETYPE_BUS eBusType, void** ppvInterfa
 {
     IBusMasterKernel* kernel;
     getBusmasterKernel( &kernel );
-    if ( nullptr != kernel )
+    if (kernel)
     {
-        IBusService* busService;
+        IBusService* busService = NULL;
         kernel->getBusService( eBusType, &busService );
 
         HRESULT hResult = S_OK;
