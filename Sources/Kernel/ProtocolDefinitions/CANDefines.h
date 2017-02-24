@@ -16,7 +16,7 @@ public:
 
 
 
-enum eCANMsgType
+enum class eCANMsgType
 {
     eCan_Standard,
     eCan_Extended
@@ -25,22 +25,24 @@ enum eCANMsgType
 class CANFrameProps : public FrameProps
 {
 public:
-	CANFrameProps()
+        eCANMsgType m_canMsgType;
+	void CANFrameProps()
 	{
 		m_eProtocol = eProtocolType::eCANProtocol;
 	}
-    eCANMsgType m_canMsgType;
+    
 };
 
 
 class CANCompuMethods : public CompuMethodProps
 {
 public:
-	CANCompuMethods()
+         CCompuMethod m_CompuMethod;
+	void CANCompuMethods()
 	{
 		this->m_eType = eCANProtocol;
 	}
-    CCompuMethod m_CompuMethod;
+   
 };
 
 
@@ -61,9 +63,7 @@ class CANEcuProperties : public EcuProperties
 {
 public:
 	eProtocolType m_eProtocol;
-
-
-	CANEcuProperties()
+	void CANEcuProperties()
 	{
 		m_eProtocol = eProtocolType::eCANProtocol;
 	}
